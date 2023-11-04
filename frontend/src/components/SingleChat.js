@@ -12,7 +12,7 @@ import io from "socket.io-client";
 import Lottie from "lottie-react";
 import animationData from "../animations/typing.json";
 
-const ENDPOINT = "https://chitchat-8es5.onrender.com";
+const ENDPOINT = "https://letschitchat.onrender.com";
 var socket, selectedChatCompare;
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
