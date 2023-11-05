@@ -45,7 +45,7 @@ const ChangePassword = () => {
                 },
                 config
             );
-            console.log(data);
+            // console.log(data);
 
             toast({
                 title: `OTP sent to ${email}`,
@@ -153,7 +153,7 @@ const ChangePassword = () => {
             </FormControl>
 
             <Button colorScheme={"blue"} width={"30%"} style={{ marginTop: 10 }} onClick={changeHandler} isLoading={loading}>
-                Change Password
+                Submit
             </Button>
         </VStack>
     );
