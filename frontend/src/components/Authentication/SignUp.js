@@ -130,7 +130,7 @@ const SignUp = () => {
 
             localStorage.setItem("userInfo", JSON.stringify(data));
             setLoading(false);
-            // history.push("/chats");
+            //history.push("/chats");
             window.location.replace(`${window.location.href}chats`);
         } catch (error) {
             toast({
