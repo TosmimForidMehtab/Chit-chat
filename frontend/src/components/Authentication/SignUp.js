@@ -5,7 +5,6 @@ import { Input, InputGroup, InputRightElement } from "@chakra-ui/input";
 import { Button } from "@chakra-ui/button";
 import { useToast } from "@chakra-ui/react";
 import axios from "axios";
-import { useHistory } from "react-router-dom";
 
 const SignUp = () => {
     const [show, setShow] = useState(false);
@@ -15,8 +14,9 @@ const SignUp = () => {
     const [confirmPassword, setConfirmPassword] = useState();
     const [pic, setPic] = useState();
     const [loading, setLoading] = useState(false);
+    const [otp, setOtp] = useState();
+    const [sentOtp, setSentOtp] = useState();
     const toast = useToast();
-    const history = useHistory();
 
     const handleClick = () => setShow(!show);
 
@@ -65,6 +65,54 @@ const SignUp = () => {
         }
     };
 
+    const sendOtp = async () => {
+        if (!email) {
+            toast({
+                title: "Please fill all the required fields",
+                status: "warning",
+                duration: 5000,
+                isClosable: true,
+                position: "bottom",
+            });
+
+            return;
+        }
+
+        try {
+            const config = {
+                headers: {
+                    "Content-type": "application/json",
+                },
+            };
+
+            const { data } = await axios.post(
+                "/api/user/generate",
+                {
+                    email,
+                },
+                config
+            );
+            setSentOtp(data.otp);
+
+            toast({
+                title: `OTP sent to ${email}`,
+                status: "success",
+                duration: 5000,
+                isClosable: true,
+                position: "bottom",
+            });
+        } catch (error) {
+            toast({
+                title: "Couldn't send OTP",
+                description: error.response.data.message,
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+                position: "bottom",
+            });
+        }
+    };
+
     const submitHandler = async () => {
         setLoading(true);
         if (!name || !email || !password || !confirmPassword) {
@@ -99,6 +147,18 @@ const SignUp = () => {
                 isClosable: true,
                 position: "bottom",
             });
+            return;
+        }
+
+        if (otp !== sentOtp) {
+            toast({
+                title: "Invalid OTP",
+                status: "warning",
+                duration: 5000,
+                isClosable: true,
+                position: "bottom",
+            });
+            setLoading(false);
             return;
         }
 
@@ -155,6 +215,16 @@ const SignUp = () => {
             <FormControl id="email" isRequired>
                 <FormLabel>Email</FormLabel>
                 <Input placeholder="Enter your email" onChange={(e) => setEmail(e.target.value)} />
+            </FormControl>
+
+            <Button colorScheme={"blue"} width={"100%"} style={{ marginTop: 15 }} onClick={sendOtp}>
+                Send OTP
+            </Button>
+
+            <FormControl id="changepassword" isRequired>
+                <FormLabel>OTP</FormLabel>
+                <Input placeholder="Enter OTP to verify" onChange={(e) => setOtp(e.target.value)} value={otp || ""} />
+                {/* value={email}  */}
             </FormControl>
 
             <FormControl id="password" isRequired>
