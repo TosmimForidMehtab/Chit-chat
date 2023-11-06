@@ -17,7 +17,7 @@ function Homepage() {
     return (
         <Container maxW="xl" centerContent>
             <Box display={"flex"} justifyContent="center" p={3} bg="white" w="100%" m="40px 0 15px 0" borderRadius="lg" borderWidth="1px" backgroundColor={"ActiveBorder"}>
-                <Text fontSize="4xl" fontFamily="Work sans">
+                <Text fontSize="4xl" fontFamily="Work sans" color={"white"}>
                     ChitChat
                 </Text>
             </Box>
