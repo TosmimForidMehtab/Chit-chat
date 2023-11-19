@@ -1,24 +1,45 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
+const validator = require("validator");
 
 const userSchema = mongoose.Schema(
     {
         name: {
             type: "String",
-            required: true,
+            required: [true, "Name cannot be empty"],
+            trim: true,
+            minLength: [3, "Name must be at least 3 characters got {VALUE}"],
         },
         email: {
             type: "String",
-            unique: true,
-            required: true,
+            unique: [true, "Email already exists"],
+            required: [true, "Email cannot be empty"],
+            validate: {
+                validator: validator.isEmail,
+                message: "Please provide a valid email",
+            },
         },
         password: {
             type: "String",
             required: true,
+            validate: {
+                validator: (value) => {
+                    return validator.isStrongPassword(value, {
+                        minLength: 6,
+                        minLowercase: 1,
+                        minUppercase: 1,
+                        minNumbers: 1,
+                        minSymbols: 1,
+                    });
+                },
+                message:
+                    "Password must contain at least 6 characters, 1 uppercase, 1 lowercase, 1 number and 1 symbol",
+            },
         },
         pic: {
             type: "String",
-            default: "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg",
+            default:
+                "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg",
         },
         isAdmin: {
             type: Boolean,
